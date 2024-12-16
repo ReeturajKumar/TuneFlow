@@ -6,4 +6,5 @@ router.get("/", (req, res) => {
   res.send("User Route")
 }) 
 
+
 export default router

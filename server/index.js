@@ -6,10 +6,15 @@ import authRoutes from "./routes/authRoute.js"
 import songRoutes from "./routes/songsRoute.js"
 import albumRoutes from "./routes/albumsRoute.js"
 import statsRoutes from "./routes/statsRoute.js"
+import { connectDB } from "./lib/db.js"
 
 const app = express()
 const PORT = process.env.PORT || 8000
 dotenv.config()
+
+app.use(express.json())
+
+
 
 
 app.use("/api/v1/users", userRoutes);
@@ -26,6 +31,7 @@ app.get("/", (req, res) => {
 
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`)
+  console.log(`Server is running on port ${PORT}`);
+  connectDB();
 })
 
