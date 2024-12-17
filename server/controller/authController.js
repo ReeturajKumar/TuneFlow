@@ -1,7 +1,7 @@
 import { User } from './../models/userModel.js';
 
 
-export const authCallback = async (req, res) => { 
+export const authCallback = async (req, res, next) => { 
  try {
   const {id, firstName, lastName,imageUrl} = req.body;
 
@@ -18,6 +18,6 @@ export const authCallback = async (req, res) => {
   res.status(200).json({message: "Success", success: true})
  } catch (error) {
   console.log(error, "Error in auth callback");
-  res.status(500).json({message: "Error in auth callback", success: false});
+  next(error);
  }
 }

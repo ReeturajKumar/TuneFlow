@@ -22,5 +22,6 @@ export const requireAdmin = async (req, res, next) => {
  } catch (error) {
   console.log(error);
   res.status(500).json({ message: "Internal server error", success: false });
+  next(error);
  }
 }
