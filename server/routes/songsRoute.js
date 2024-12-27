@@ -1,9 +1,12 @@
 import { Router } from "express";
+import { getAllSongs, getFeaturedSongs, getMadeForYouSongs, getTrendingSongs } from "../controller/songController.js";
+import { protectRoute, requireAdmin } from './../middelware/authMiddelware.js';
 
 const router = Router();
 
-router.get("/", (req, res) => { 
-  res.send("Song Route")
-}) 
+router.get("/",protectRoute, requireAdmin, getAllSongs);
+router.get("/featured", getFeaturedSongs);
+router.get("/made-for-you", getMadeForYouSongs);
+router.get("/trending", getTrendingSongs);
 
 export default router
