@@ -1,13 +1,23 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TuneFlow</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <!-- Inline CSS to prevent white flash -->
+    <style>
+      html {
+        background-color: #101010; /* Matches your dark mode --background color */
+        color: #f5f5f5; /* Matches your dark mode --foreground color */
+      }
+    </style>
   </head>
   <body>
+    <!-- React root element -->
     <div id="root"></div>
+    <!-- Entry point for your app -->
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
