@@ -16,9 +16,10 @@ const Topbar = () => {
       {/* Right Section */}
       <div className="flex items-center gap-4">
         {/* Admin Access: Show Dashboard Link */}
-        {!isAdmin && (
-          <Link to="/login" className="flex items-center text-white">
+        {isAdmin && (
+          <Link to="/dashboard" className="flex items-center text-white">
             <LayoutDashboardIcon className="w-5 h-5 mr-2" />
+            <span>Dashboard</span>
           </Link>
         )}
 
