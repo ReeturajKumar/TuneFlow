@@ -9,15 +9,11 @@ import { HomeIcon, LibraryIcon, MessageCircle } from "lucide-react";
 import { SignedIn } from "@clerk/clerk-react";
 
 const LeftLayout = () => {
-  const { albums, fetchAlbums, isLoading} = useMusicStore();
+  const { albums, fetchAlbums, isLoading } = useMusicStore();
 
   useEffect(() => {
     fetchAlbums();
   }, [fetchAlbums]);
-
-  // Log albums and its type for debugging
-  // console.log("Albums in UI:", albums);
-  // console.log("Type of albums:", Array.isArray(albums));
 
   return (
     <div className="h-full flex flex-col gap-2">
@@ -63,24 +59,30 @@ const LeftLayout = () => {
         </div>
         <ScrollArea className="h-[calc(100vh-250px)]">
           <div className="space-y-2">
-            {isLoading ? <PlayListSkeltons /> : (
-              Array.isArray(albums) && albums.length > 0 ? (
-                albums.map((album) => (
-                  <Link to={`/albums/${album._id}`} key={album._id} 
-                  className="p-2 hover:bg-zinc-800 rounded-md flex items-center gap-9 group cursor-pointer"
-                  >
-                    <img src={album.imageUrl} alt= "Playlist Image" className="w-12 h-12 object-cover rounded-md flex-shrink-0" />
-                    <div className="flex-1 min-w-0 hidden md:block">
-                      <p className="font-medium truncate">{album.title}</p>
-                      <p className="text-sm text-zinc-400 truncate">
-                        {album.artist}
-                      </p>
-                    </div>
-                  </Link>
-                ))
-              ) : (
-                <div>No albums available</div>
-              )
+            {isLoading ? (
+              <PlayListSkeltons />
+            ) : Array.isArray(albums) && albums.length > 0 ? (
+              albums.map((album) => (
+                <Link
+                  to={`/albums/${album._id}`}
+                  key={album._id}
+                  className="p-2 hover:bg-zinc-800 rounded-md flex items-center gap-5 group cursor-pointer"
+                >
+                  {/* Responsive Image */}
+                  <img
+                    src={album.imageUrl}
+                    alt="Playlist"
+                    className="hidden sm:block w-12 h-12 rounded-md flex-shrink-0 object-cover"
+                  />
+                  {/* Album Details */}
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium truncate text-white">{album.title}</p>
+                    <p className="text-sm text-zinc-400 truncate">{album.artist}</p>
+                  </div>
+                </Link>
+              ))
+            ) : (
+              <div className="text-zinc-400">No albums available</div>
             )}
           </div>
         </ScrollArea>
