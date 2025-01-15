@@ -16,6 +16,7 @@ function App() {
         }
       />
       <Route path="/auth-callback" element={<AuthCallBackPage />} />
+      <Route path='/admin' element={<HomePage />} />
 
       <Route element={<MainLayout />}>
         <Route path="/" element={<HomePage />} />

@@ -15,7 +15,7 @@ const RightLayout = () => {
     if(user) fetchUsers();
   }, [fetchUsers, user]);
 
-  const isPlaying = false;
+  const isPlaying = true;
 
 
 
@@ -64,7 +64,7 @@ const RightLayout = () => {
                           <div className="text-xs text-zinc-400 truncate">by Cardign</div>
                         </div>
                       ) : (
-                        <div className="mt-1 text-xs text-zinc-400">Idle</div>
+                        <div className="mt-1 text-xs text-zinc-400">Offline</div>
                       )
                     }
                   </div>

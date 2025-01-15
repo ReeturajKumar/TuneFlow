@@ -50,7 +50,7 @@ const AlbumPage = () => {
                   <span className="font-medium text-white">
                     {currentAlbum?.artist}
                   </span>
-                  <span>♬ {currentAlbum?.songs.length} songs</span>
+                  <span>◦ {currentAlbum?.songs.length} songs</span>
                   <span>◦ {currentAlbum?.releaseYear}</span>
                 </div>
               </div>
