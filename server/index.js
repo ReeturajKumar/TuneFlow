@@ -9,60 +9,52 @@ import statsRoutes from "./routes/statsRoute.js"
 import { connectDB } from "./lib/db.js"
 import { clerkMiddleware } from '@clerk/express'
 import fileUpload from "express-fileupload"
-import  path  from 'path';
+import path from 'path'
 import cors from "cors"
 
-
-
 const __dirname = path.resolve();
-const app = express()
+const app = express();
 const PORT = process.env.PORT || 8000;
 
+dotenv.config();
 
 app.use(cors({
   origin: 'http://localhost:3000',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
-}))
-dotenv.config()
+}));
 
-app.use(express.json())
-app.use(clerkMiddleware())
+app.use(express.json());
+app.use(clerkMiddleware());
+
 app.use(fileUpload({
   useTempFiles: true,
-  tempFileDir: 'path.join(__dirname, "tmp")',
+  tempFileDir: path.join(__dirname, "tmp"), 
   createParentPath: true,
   limits: {
-    fileSize: 10 * 1024 * 1024
+    fileSize: 10 * 1024 * 1024 // 10MB max file size
   }
-}))
-
-
+}));
 
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/admin", adminRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/songs", songRoutes);
-app.use("/api/v1/albums",albumRoutes);
-app.use("/api/v1/stats",statsRoutes);
+app.use("/api/v1/albums", albumRoutes);
+app.use("/api/v1/stats", statsRoutes);
 
-
-//error handler
+// Error handler
 app.use((err, req, res, next) => {
-  res.status(500).json({ message:process.env.NODE_ENV === "production" ?"Internal Server Error" : err.message });
+  res.status(500).json({
+    message: process.env.NODE_ENV === "production" ? "Internal Server Error" : err.message
+  });
 });
 
-
 app.get("/", (req, res) => {
-  res.send("Server is running")
-})
-
+  res.send("Server is running");
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
   connectDB();
-})
-
-
-// todo: socket.io
-
+});

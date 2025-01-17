@@ -23,7 +23,7 @@ const Topbar = () => {
       <div className="flex items-center gap-4">
         {/* Admin Access: Show Dashboard Link */}
         {isAdmin && (
-          <Link to={"/admin"} className={
+          <Link to={"/admin-panel"} className={
             cn(
               buttonVariants({variant: "outline"}),
             )
