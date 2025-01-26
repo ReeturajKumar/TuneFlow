@@ -14,7 +14,7 @@ const updateApiToken = (token: string | null) => {
 };
 
 const AuthProviderComponent = ({ children }: { children: React.ReactNode }) => {
-  const { getToken,userId } = useAuth();
+  const { getToken, userId } = useAuth();
   const [loading, setLoading] = useState(true);
   const {checkAdminStatus} = useAuthStore();
   const {initSocket, disconnectSocket} = useChatStore();
@@ -26,10 +26,8 @@ const AuthProviderComponent = ({ children }: { children: React.ReactNode }) => {
         updateApiToken(token);
         if (token) {
           await checkAdminStatus();
-          // socket
-          if(userId){
-            initSocket(userId);
-          }
+         if(userId) initSocket(userId);
+         
 
 
         }
@@ -44,9 +42,8 @@ const AuthProviderComponent = ({ children }: { children: React.ReactNode }) => {
     initAuth();
 
     // clean up 
-    return () => {
-      disconnectSocket();
-    }
+    return () => disconnectSocket();
+    
   }, [checkAdminStatus, disconnectSocket, getToken, initSocket, userId]);
 
   if (loading) {

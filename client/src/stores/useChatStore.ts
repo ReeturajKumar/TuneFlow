@@ -41,7 +41,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 	messages: [],
 	selectedUser: null,
 
-	setSelectedUser: (user) => set({ selectedUser: user }),
+	setSelectedUser: (user) => {
+		set({ selectedUser: user });
+	},
 
 	fetchUsers: async () => {
 		set({ isLoading: true, error: null });
@@ -59,6 +61,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 		if (!get().isConnected) {
 			socket.auth = { userId };
 			socket.connect();
+			
 
 			socket.emit("user_connected", userId);
 
@@ -122,7 +125,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 		socket.emit("send_message", { receiverId, senderId, content });
 	},
 
-	fetchMessages: async (userId: string) => {
+	fetchMessages: async (userId:string) => {
 		set({ isLoading: true, error: null });
 		try {
 			const response = await axiosInstance.get(`/users/messages/${userId}`);
