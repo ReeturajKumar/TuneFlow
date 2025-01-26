@@ -55,5 +55,5 @@ theme: {
 			}
 		}
 	},
-plugins: [require(tailwindcssAnimate)],
+plugins: [tailwindcssAnimate],
 };
