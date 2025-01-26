@@ -1,12 +1,12 @@
 import { Router } from "express";
 import { protectRoute } from "../middelware/authMiddelware.js";
-import { getAllUsers } from "../controller/userController.js";
+import { getAllUsers, getMessages } from "../controller/userController.js";
 
 const router = Router();
 
 router.get("/", protectRoute, getAllUsers );
 
-// todo: getMessages
+router.get("/message/:userId", protectRoute, getMessages );
 
 
 export default router

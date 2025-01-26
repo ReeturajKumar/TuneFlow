@@ -15,7 +15,7 @@ const RightLayout = () => {
     if(user) fetchUsers();
   }, [fetchUsers, user]);
 
-  const isPlaying = true;
+  const isPlaying = false;
 
 
 
