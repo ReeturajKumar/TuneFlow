@@ -6,76 +6,73 @@ import { AvatarFallback } from "@radix-ui/react-avatar";
 import { HeadphonesIcon, Music, Users } from "lucide-react";
 import { useEffect } from "react";
 
-
 const RightLayout = () => {
-  const {users,fetchUsers} = useChatStore();
-  const {user} = useUser();
+  const { users, fetchUsers, onlineUsers, userActivities } = useChatStore();
+  const { user } = useUser();
 
   useEffect(() => {
-    if(user) fetchUsers();
+    if (user) fetchUsers();
   }, [fetchUsers, user]);
-
-  const isPlaying = false;
-
-
 
   return (
     <div className="h-full bg-zinc-900 rounded-lg flex flex-col">
       <div className="p-4 flex justify-between items-center border-b border-zinc-800">
         <div className="flex items-center gap-2">
-          <Users className="size-5 shrink-0"/>
+          <Users className="size-5 shrink-0" />
           <h2 className="font-semibold">What they're listening to</h2>
         </div>
       </div>
-      {!user &&<LoginPrompt/>}
+      {!user && <LoginPrompt />}
 
       <ScrollArea className="flex-1">
         <div className="p-4 space-y-4">
-          {users.map((user) => (
-            <div key={user._id} className="cursor-pointer hover:bg-zinc-800/50 rounded-md p-3 transition-colors group">
-              <div className="flex items-center gap-4">
-                <div className="relative">
-                  <Avatar className="w-12 h-12 border-zinc-800">
-                    <AvatarImage
-                      src={user.imageUrl}
-                      alt={user.fullName}
-                      />
-                       <AvatarFallback>{user.fullName[0]}</AvatarFallback>
-                  </Avatar>
-                  <div className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-zinc-500`}  aria-hidden="true"/>
-
+          {users.map((user) => {
+            const activity = userActivities.get(user.clerkId);
+            const isPlaying = activity && activity !== "Idle";
+            const isOnline = onlineUsers.has(user.clerkId);
+            const statusText = isOnline ? "Online" : "Offline";
+          
+            return (
+              <div key={user._id} className="cursor-pointer hover:bg-zinc-800/50 rounded-md p-3 transition-colors group">
+                <div className="flex items-center gap-4">
+                  <div className="relative">
+                    <Avatar className="w-12 h-12 border-zinc-800">
+                      <AvatarImage src={user.imageUrl} alt={user.fullName} />
+                      <AvatarFallback>{user.fullName[0]}</AvatarFallback>
+                    </Avatar>
+                    <div
+                      className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-zinc-900
+                      ${isOnline ? "bg-[#6c63ff]" : "bg-zinc-500"}`}
+                      aria-hidden="true"
+                    />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
                       <span className="font-medium text-sm text-white">{user.fullName}</span>
-                      {
-                        isPlaying && (
-                          <Music className="size-4 text-[#6c63ff] shrink-0">
-                          </Music>
-                        )
-                      }
+                      {isPlaying && <Music className="size-4 text-[#6c63ff] shrink-0" />}
                     </div>
-                    {
-                      isPlaying ? (
-                        <div className="mt-1">
-                          <div className="mt-1 text-sm text-white font-medium truncate">
-                            Cardign
-                          </div>
-                          <div className="text-xs text-zinc-400 truncate">by Cardign</div>
+                    {isPlaying ? (
+                      <div className="mt-1">
+                        <div className="mt-1 text-sm text-white font-medium truncate">
+                          {activity.replace("Playing ", "").split(" by ")[0]}
                         </div>
-                      ) : (
-                        <div className="mt-1 text-xs text-zinc-400">Offline</div>
-                      )
-                    }
+                        <div className="text-xs text-zinc-400 truncate">
+                          {activity.split(" by ")[1]}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="mt-1 text-xs text-zinc-400">{statusText}</div>
+                    )}
                   </div>
-                </div >
+                </div>
               </div>
-          ))}
+            );
+          })}
         </div>
-        </ScrollArea>
+      </ScrollArea>
     </div>
-  )
-}
+  );
+};
 
 export default RightLayout;
 
