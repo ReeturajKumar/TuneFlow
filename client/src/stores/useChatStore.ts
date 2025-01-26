@@ -23,7 +23,7 @@ interface ChatStore {
 	setSelectedUser: (user: User | null) => void;
 }
 
-const baseURL = "http://localhost:8080";
+const baseURL = import.meta.env.MODE === 'development' ? 'http://localhost:8080' : 'https://tuneflow.onrender.com'
 
 const socket = io(baseURL, {
 	autoConnect: false,

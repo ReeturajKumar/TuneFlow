@@ -11,7 +11,9 @@ import { clerkMiddleware } from '@clerk/express'
 import fileUpload from "express-fileupload"
 import path from 'path'
 import cors from "cors"
+import fs from "fs"
 import { createServer } from "http"
+import cron from "node-cron"
 import { initializeSocket } from "./lib/socket.js"
 
 
@@ -47,12 +49,47 @@ app.use(fileUpload({
   }
 }));
 
+
+const tempdir = path.join(process.cwd(), "tmp");
+// cron job
+cron.schedule("0 * * * *",  () => {
+  if (fs.existsSync(tempdir)) {
+		fs.readdir(tempdir, (err, files) => {
+			if (err) {
+				console.log("error", err);
+				return;
+			}
+			for (const file of files) {
+				fs.unlink(path.join(tempdir, file), (err) => {});
+			}
+		});
+	}
+})
+
+
+
+
+
+
+
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/admin", adminRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/songs", songRoutes);
 app.use("/api/v1/albums", albumRoutes);
 app.use("/api/v1/stats", statsRoutes);
+
+
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../client/dist")));
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../client","dist", "index.html"));
+  });
+}
+
+
+
 
 // Error handler
 app.use((err, req, res, next) => {
