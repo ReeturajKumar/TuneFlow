@@ -16,7 +16,7 @@ const LeftLayout = () => {
   }, [fetchAlbums]);
 
   return (
-    <div className="h-full flex flex-col gap-2">
+    <div className="h-full flex flex-col gap-2 max-w-[500px]:hidden">
       {/* Navigation */}
       <div className="rounded-lg bg-zinc-900 p-4">
         <div className="space-y-2">
@@ -30,7 +30,7 @@ const LeftLayout = () => {
             )}
           >
             <HomeIcon className="mr-2 size-5" />
-            <span className="hidden md:inline">Home</span>
+            <span className="hidden sm:inline">Home</span>
           </Link>
           <SignedIn>
             <Link
@@ -43,7 +43,7 @@ const LeftLayout = () => {
               )}
             >
               <MessageCircle className="mr-2 size-6" />
-              <span className="hidden md:inline">Messages</span>
+              <span className="hidden sm:inline">Messages</span>
             </Link>
           </SignedIn>
         </div>
@@ -54,7 +54,7 @@ const LeftLayout = () => {
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center text-white px-2">
             <LibraryIcon className="mr-2 size-5" />
-            <span className="text-xl font-semibold hidden md:inline">Playlists</span>
+            <span className="text-xl font-semibold hidden sm:inline">Playlists</span>
           </div>
         </div>
 
@@ -83,11 +83,11 @@ const LeftLayout = () => {
                     key={album._id}
                     className="p-2 hover:bg-zinc-800 rounded-md flex items-center gap-5 group cursor-pointer transition duration-300 transform hover:scale-105"
                   >
-                    {/* Responsive Image */}
+                    {/* Responsive Image: Hidden for screens <= 500px */}
                     <img
                       src={album.imageUrl}
                       alt="Playlist"
-                      className="hidden sm:block w-12 h-12 rounded-md flex-shrink-0 object-cover"
+                      className="hidden sm:block max-w-[500px]:hidden w-12 h-12 rounded-md flex-shrink-0 object-cover"
                     />
                     {/* Album Details */}
                     <div className="flex-1 min-w-0">
