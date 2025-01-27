@@ -16,7 +16,7 @@ const UsersList = () => {
               ) : (
                 users.map((user) => (
                   <div
-                  key={user._id}
+                  key={user.clerkId}
                   onClick={() => setSelectedUser(user)}
                   className={`flex items-center justify-center lg:justify-start gap-3 p-3 rounded-lg cursor-pointer transition-colors ${
                     selectedUser?.clerkId === user.clerkId ? "bg-[#2d2b51]" : "hover:bg-zinc-800/50"

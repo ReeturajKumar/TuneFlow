@@ -33,7 +33,7 @@ const RightLayout = () => {
             const statusText = isOnline ? "Online" : "Offline";
           
             return (
-              <div key={user._id} className="cursor-pointer hover:bg-zinc-800/50 rounded-md p-3 transition-colors group">
+              <div key={user.clerkId} className="cursor-pointer hover:bg-zinc-800/50 rounded-md p-3 transition-colors group">
                 <div className="flex items-center gap-4">
                   <div className="relative">
                     <Avatar className="w-12 h-12 border-zinc-800">
