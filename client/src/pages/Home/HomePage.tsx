@@ -75,7 +75,7 @@ const HomePage = () => {
               <>
                 {greeting}, {user?.firstName|| "there"}!{" "}
                 {/* User's First Name with fallback */}
-                <span className="ml-2 text-4xl">{icon}</span>
+                <span className="ml-2 text-4xl text-red-700">{icon}</span>
               </>
             ) : (
               <>

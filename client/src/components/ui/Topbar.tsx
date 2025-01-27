@@ -14,10 +14,12 @@ const Topbar = () => {
   return (
     <div className="flex items-center justify-between p-4 sticky top-0 bg-zinc-900/75 backdrop-blur-md z-10">
       {/* Left Section */}
-      <div className="flex gap-2 items-center">
+     <Link to={"/"}>
+     <div className="flex gap-2 items-center text-2xl font-extrabold cursor-pointer">
           <img src={logo} alt="TuneFlow"  className="size-8"/>
           TuneFlow
       </div>
+     </Link>
 
       {/* Right Section */}
       <div className="flex items-center gap-4">
