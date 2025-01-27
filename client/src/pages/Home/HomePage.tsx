@@ -80,7 +80,7 @@ const HomePage = () => {
             ) : (
               <>
                 {greeting}!{" "}
-                <span className="ml-2 text-4xl">{icon}</span>
+                <span className="ml-2 text-4xl"></span>
               </>
             )}
           </motion.h1>
