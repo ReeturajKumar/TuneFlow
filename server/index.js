@@ -1,5 +1,5 @@
+import "dotenv/config" // must be first: ESM runs imports before module body
 import express from "express"
-import dotenv from "dotenv"
 import userRoutes from "./routes/userRoute.js"
 import adminRoutes from "./routes/adminRoute.js"
 import authRoutes from "./routes/authRoute.js"
@@ -17,24 +17,21 @@ import cron from "node-cron"
 import { initializeSocket } from "./lib/socket.js"
 
 
-dotenv.config();
-
 const __dirname = path.resolve();
 const app = express();
 const PORT = process.env.PORT || 8080;
 
+// comma-separated, e.g. "https://tuneflow.vercel.app,http://localhost:3000"
+const allowedOrigins = (process.env.CLIENT_URL || "http://localhost:3000").split(",").map((o) => o.trim());
+
 const httpServer = createServer(app);
-initializeSocket(httpServer);
+initializeSocket(httpServer, allowedOrigins);
 
 
 
 
-app.use(
-	cors({
-		origin: "http://localhost:3000",
-		credentials: true,
-	})
-);
+app.set("trust proxy", 1); // behind nginx on Lightsail
+app.use(cors({ origin: allowedOrigins, credentials: true }));
 
 
 app.use(express.json());
@@ -81,12 +78,7 @@ app.use("/api/v1/stats", statsRoutes);
 
 
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../client/dist")));
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "../client","dist", "index.html"));
-  });
-}
+
 
 
 

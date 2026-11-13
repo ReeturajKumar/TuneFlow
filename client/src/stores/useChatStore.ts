@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { axiosInstance } from "@/lib/axios";
+import { API_URL, axiosInstance } from "@/lib/axios";
 import { Message, User } from "@/types";
 import { create } from "zustand";
 import { io } from "socket.io-client";
@@ -23,9 +23,8 @@ interface ChatStore {
 	setSelectedUser: (user: User | null) => void;
 }
 
-const baseURL = import.meta.env.MODE === 'development' ? 'http://localhost:8080' : '/'
 
-const socket = io(baseURL, {
+const socket = io(API_URL, {
 	autoConnect: false,
 	withCredentials: true,
 });

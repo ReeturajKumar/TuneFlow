@@ -2,10 +2,10 @@ import { Server } from "socket.io";
 import { verifyToken } from "@clerk/express";
 import { Message } from "../models/messageModel.js";
 
-export const initializeSocket = (server) => {
+export const initializeSocket = (server, allowedOrigins) => {
   const io = new Server(server, {
     cors: {
-      origin: "http://localhost:3000",
+      origin: allowedOrigins,
       credentials: true,
     },
   });
