@@ -11,7 +11,7 @@ const AudioPlayer = () => {
   useEffect(() => {
     if (audioRef.current) {
       if (isPlaying) {
-        audioRef.current.play();
+        audioRef.current.play().catch(() => usePlayerStore.setState({ isPlaying: false }));
       } else {
         audioRef.current.pause();
       }
@@ -44,7 +44,7 @@ const AudioPlayer = () => {
       prevSongUrlRef.current = currentSong.audioUrl;
 
       if (isPlaying) {
-        audio.play();
+        audio.play().catch(() => usePlayerStore.setState({ isPlaying: false }));
       }
     }
   }, [currentSong, isPlaying]);

@@ -1,7 +1,7 @@
 import { clerkClient } from "@clerk/express";
 
 export const protectRoute = async (req, res, next) => {
-  if(!req.auth.userId) {
+  if(!req.auth?.userId) {
     return res.status(401).json({ message: "Unauthorized - You must have to login first" });
   } else {
     next();
@@ -20,8 +20,6 @@ export const requireAdmin = async (req, res, next) => {
     next();
   }
  } catch (error) {
-  console.log(error);
-  res.status(500).json({ message: "Internal server error", success: false });
   next(error);
  }
 }

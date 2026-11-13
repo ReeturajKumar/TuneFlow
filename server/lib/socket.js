@@ -1,4 +1,5 @@
 import { Server } from "socket.io";
+import { verifyToken } from "@clerk/express";
 import { Message } from "../models/messageModel.js";
 
 export const initializeSocket = (server) => {
@@ -12,8 +13,23 @@ export const initializeSocket = (server) => {
   const userSockets = new Map(); // { userId: socketId}
   const userActivities = new Map(); // {userId: activity}
 
+  // identity comes from the verified Clerk token, never from client payloads
+  io.use(async (socket, next) => {
+    try {
+      const { sub } = await verifyToken(socket.handshake.auth?.token, {
+        secretKey: process.env.CLERK_SECRET_KEY,
+      });
+      socket.userId = sub;
+      next();
+    } catch {
+      next(new Error("Unauthorized"));
+    }
+  });
+
   io.on("connection", (socket) => {
-    socket.on("user_connected", (userId) => {
+    const userId = socket.userId;
+
+    socket.on("user_connected", () => {
       userSockets.set(userId, socket.id);
       userActivities.set(userId, "Online");
 
@@ -23,18 +39,17 @@ export const initializeSocket = (server) => {
       io.emit("activities", Array.from(userActivities.entries()));
     });
 
-    socket.on("update_activity", ({ userId, activity }) => {
-      console.log("activity updated", userId, activity);
+    socket.on("update_activity", ({ activity }) => {
       userActivities.set(userId, activity);
       io.emit("activity_updated", { userId, activity });
     });
 
     socket.on("send_message", async (data) => {
       try {
-        const { senderId, receiverId, content } = data;
+        const { receiverId, content } = data;
 
         const message = await Message.create({
-          senderId,
+          senderId: userId,
           receiverId,
           content,
         });
@@ -53,18 +68,11 @@ export const initializeSocket = (server) => {
     });
 
     socket.on("disconnect", () => {
-      let disconnectedUserId;
-      for (const [userId, socketId] of userSockets.entries()) {
-        // find disconnected user
-        if (socketId === socket.id) {
-          disconnectedUserId = userId;
-          userSockets.delete(userId);
-          userActivities.delete(userId);
-          break;
-        }
-      }
-      if (disconnectedUserId) {
-        io.emit("user_disconnected", disconnectedUserId);
+      // only clear if this is still the user's active socket (not an older tab)
+      if (userSockets.get(userId) === socket.id) {
+        userSockets.delete(userId);
+        userActivities.delete(userId);
+        io.emit("user_disconnected", userId);
       }
     });
   });

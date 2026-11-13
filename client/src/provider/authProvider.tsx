@@ -5,35 +5,33 @@ import { Loader } from "lucide-react";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useChatStore } from "@/stores/useChatStore";
 
-const updateApiToken = (token: string | null) => {
-  if (token) {
-    axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-  } else {
-    delete axiosInstance.defaults.headers.common["Authorization"];
-  }
-};
-
 const AuthProviderComponent = ({ children }: { children: React.ReactNode }) => {
   const { getToken, userId } = useAuth();
   const [loading, setLoading] = useState(true);
   const {checkAdminStatus} = useAuthStore();
   const {initSocket, disconnectSocket} = useChatStore();
 
+  // Clerk session tokens expire after ~60s, so fetch a fresh one per request
+  useEffect(() => {
+    const id = axiosInstance.interceptors.request.use(async (config) => {
+      const token = await getToken();
+      if (token) config.headers.Authorization = `Bearer ${token}`;
+      return config;
+    });
+    return () => axiosInstance.interceptors.request.eject(id);
+  }, [getToken]);
+
   useEffect(() => {
     const initAuth = async () => {
       try {
-        const token = await getToken();
-        updateApiToken(token);
-        if (token) {
+        if (userId) {
           await checkAdminStatus();
-         if(userId) initSocket(userId);
-         
-
-
+          initSocket(getToken);
+        } else {
+          useAuthStore.getState().reset();
         }
       } catch (err) {
         console.error("Error initializing authentication:", err);
-        updateApiToken(null);
       } finally {
         setLoading(false);
       }

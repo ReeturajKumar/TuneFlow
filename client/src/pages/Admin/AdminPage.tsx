@@ -22,7 +22,7 @@ const AdminPage = () => {
 
   
 
-  if(!isAdmin && !isLoading) return <div>{error}</div>;
+  if (!isAdmin && !isLoading) return <div className="p-8 text-zinc-400">{error || "Unauthorized - admin access only"}</div>;
 
   return (
   <div className="min-h-screen bg-gradient-to-b from-zinc-900 via-zinc-900 to-black text-zinc-100 p-8">

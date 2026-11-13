@@ -21,7 +21,7 @@ dotenv.config();
 
 const __dirname = path.resolve();
 const app = express();
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8080;
 
 const httpServer = createServer(app);
 initializeSocket(httpServer);

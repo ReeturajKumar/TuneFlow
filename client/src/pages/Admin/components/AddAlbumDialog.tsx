@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -5,8 +6,10 @@ import { axiosInstance } from "@/lib/axios";
 import { Plus, Upload } from "lucide-react";
 import { useRef, useState } from "react";
 import toast from "react-hot-toast";
+import { useMusicStore } from "@/stores/useMusicStore";
 
 const AddAlbumDialog = () => {
+  const { fetchAlbums, fetchStats } = useMusicStore();
   const [albumDialogOpen, setAlbumDialogOpen] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -51,6 +54,8 @@ const AddAlbumDialog = () => {
         releaseYear: new Date().getFullYear(),
       });
       setImageFile(null);
+      fetchAlbums();
+      fetchStats();
     } catch (error: any) {
       toast.error(`Error creating album: ${error.response?.data?.message || error.message}`);
     } finally {
